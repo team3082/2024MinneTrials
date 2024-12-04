@@ -7,29 +7,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.Odometery;
-import frc.robot.Subsystems.Pigeon;
+import frc.robot.Subsystems.Sensors.Pigeon;
 
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
   @Override
   public void robotInit() {
+    Pigeon.init();
     Drivetrain.init(); 
     Odometery.init();
-    Pigeon.init();
-    OI.init();
     Telemetry.init();
+    OI.init();
   }
   
-
   @Override
   public void robotPeriodic() {
     Pigeon.update();
@@ -48,7 +37,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    Drivetrain.arcadeDrive(OI.getRotation(), OI.getForward());
+    Drivetrain.arcadeDrive(OI.getForward(), OI.getRotation());
   }
 
   @Override

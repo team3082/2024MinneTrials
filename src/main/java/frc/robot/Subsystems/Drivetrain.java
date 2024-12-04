@@ -2,9 +2,12 @@ package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import frc.robot.Constants;
 
+/**
+ * A class to manage the drivetrain subsystem, including motor initialization and 
+ * control logic for driving the robot.
+ */
 public class Drivetrain {
     private static VictorSPX backRight;
     private static VictorSPX frontRight;
@@ -14,62 +17,64 @@ public class Drivetrain {
     private static double leftSideOutput;
     private static double rightSideOutput;
 
-    public static void init(){
+    /**
+     * Initializes the drivetrain motors and sets up following behavior for rear motors.
+     * Rear motors follow their respective front motors to simplify control logic.
+     */
+    public static void init() {
         backLeft = new VictorSPX(Constants.DriveTrainConstants.BACK_LEFT_ID);
         frontLeft = new VictorSPX(Constants.DriveTrainConstants.FRONT_LEFT_ID);
 
         backRight = new VictorSPX(Constants.DriveTrainConstants.BACK_RIGHT_ID);
         frontRight = new VictorSPX(Constants.DriveTrainConstants.FRONT_RIGHT_ID);
 
+        // Configure rear motors to follow front motors
         backLeft.follow(frontLeft);
         backRight.follow(frontRight);
     }
 
-    public static void arcadeDrive(double rotate, double drive) {
-        double max= Math.max(Math.abs(rotate), Math.abs(drive)); 
-        double total = drive + rotate;
-        double difference = drive - rotate;
+    /**
+     * Implements arcade drive logic to control the robot's movement based on forward 
+     * and rotational inputs.
+     *
+     * @param forward The desired forward/backward speed (-1.0 to 1.0).
+     * @param rotate  The desired rotation speed (-1.0 to 1.0).
+     */
+    public static void arcadeDrive(double forward, double rotate) {
+        // Calculate individual side speeds
+        double leftSpeed = forward + rotate;
+        double rightSpeed = forward - rotate;
 
-        double rightOutput = 0;
-        double leftOutput = 0;
+        // Normalize speeds to stay within the range [-1, 1]
+        if (Math.abs(leftSpeed) > 1) leftSpeed /= Math.abs(leftSpeed);
+        if (Math.abs(rightSpeed) > 1) rightSpeed /= Math.abs(rightSpeed);
 
-        // Constraining by quadrant
-        // Joystick (x,y) -> Motor output [L, R] (in terms of percent output)
-        if (drive >= 0) { // Q1 and Q2
-            if (rotate >= 0) { // Q1
-                // (1, 1) -> [1, 0]
-                leftOutput = (max);
-                rightOutput = (difference);
-            } else { // Q2
-                // (-1, 1) -> [0, 1]
-                leftOutput = (total);
-                rightOutput = (max);
-            }
-        } else { // Q3 and Q4
-            if (rotate >= 0) { // Q4
-                // (1,-1) -> [-1, 0]
-                rightOutput = (total);
-                leftOutput = (-max);
-            } else { // Q3
-                // (-1,-1) -> [0, -1]
-                rightOutput = (-max);
-                leftOutput = (difference);
-            }
-        }
+        // Update internal variables for telemetry or feedback
+        leftSideOutput = leftSpeed;
+        rightSideOutput = rightSpeed;
 
-        frontLeft.set(ControlMode.PercentOutput, leftOutput);
-        frontRight.set(ControlMode.PercentOutput, rightOutput);
-
-        rightSideOutput = rightOutput;
-        leftSideOutput = leftOutput;
+        // Set motor outputs
+        frontLeft.set(ControlMode.PercentOutput, leftSpeed);
+        frontRight.set(ControlMode.PercentOutput, rightSpeed);
     }
 
-    public static double getLeftPercentOutput(){
+    /**
+     * Gets the current output percentage of the left drivetrain side.
+     *
+     * @return The output percentage of the left side motors.
+     */
+    public static double getLeftPercentOutput() {
         return leftSideOutput;
     }
-    
-    public static double getRightPercentOutput(){
+
+    /**
+     * Gets the current output percentage of the right drivetrain side.
+     *
+     * @return The output percentage of the right side motors.
+     */
+    public static double getRightPercentOutput() {
         return rightSideOutput;
     }
 }
+
  
