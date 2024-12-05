@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Subsystems.Drivetrain;
-import frc.robot.Subsystems.Odometery;
+import frc.robot.Subsystems.Odometry;
 import frc.robot.Subsystems.Sensors.Pigeon;
 
 public class Robot extends TimedRobot {
@@ -14,7 +14,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     Pigeon.init();
     Drivetrain.init(); 
-    Odometery.init();
+    Odometry.init();
     Telemetry.init();
     OI.init();
   }
@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Pigeon.update();
-    Odometery.update();
+    Odometry.update();
     Telemetry.update();
   }
 
