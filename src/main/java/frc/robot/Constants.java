@@ -9,10 +9,10 @@ public class Constants {
      * Constants related to the drivetrain subsystem.
      */
     public static class DriveTrainConstants {
-        public static final int BACK_RIGHT_ID = 0; // CAN ID for the back right motor
-        public static final int BACK_LEFT_ID = 0;  // CAN ID for the back left motor
-        public static final int FRONT_RIGHT_ID = 0; // CAN ID for the front right motor
-        public static final int FRONT_LEFT_ID = 0;  // CAN ID for the front left motor
+        public static final int BACK_RIGHT_ID = 1; // CAN ID for the back right motor
+        public static final int BACK_LEFT_ID = 4;  // CAN ID for the back left motor
+        public static final int FRONT_RIGHT_ID = 2; // CAN ID for the front right motor
+        public static final int FRONT_LEFT_ID = 3;  // CAN ID for the front left motor
     }
 
     /**
@@ -29,7 +29,7 @@ public class Constants {
     public static class OIConstants {
         public static final int CONTROLLER_PORT = 0;  // Port for the primary controller
         public static final int DRIVE_AXIS = 1;       // Axis for forward/backward movement
-        public static final int ROTATE_AXIS = 2;      // Axis for rotation
+        public static final int ROTATE_AXIS = 4;      // Axis for rotation
         public static final double RANGE = 0.16;     // Deadzone range for joystick input
     }
 
@@ -37,7 +37,7 @@ public class Constants {
      * Constants related to the Pigeon gyroscope sensor.
      */
     public static class PigeonConstants {
-        public static final int PIGEON_PORT = 1; // CAN ID for the Pigeon gyroscope
+        public static final int PIGEON_PORT = 0; // CAN ID for the Pigeon gyroscope
     }
 
     /**

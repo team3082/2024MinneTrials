@@ -1,6 +1,7 @@
 package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.robot.Constants;
 
@@ -28,6 +29,11 @@ public class Drivetrain {
         backRight = new VictorSPX(Constants.DriveTrainConstants.BACK_RIGHT_ID);
         frontRight = new VictorSPX(Constants.DriveTrainConstants.FRONT_RIGHT_ID);
 
+        frontRight.setNeutralMode(NeutralMode.Brake);
+        frontLeft.setNeutralMode(NeutralMode.Brake);
+        backRight.setNeutralMode(NeutralMode.Brake);
+        backLeft.setNeutralMode(NeutralMode.Brake);
+
         // Configure rear motors to follow front motors
         backLeft.follow(frontLeft);
         backRight.follow(frontRight);
@@ -46,8 +52,12 @@ public class Drivetrain {
         double rightSpeed = forward - rotate;
 
         // Normalize speeds to stay within the range [-1, 1]
-        if (Math.abs(leftSpeed) > 1) leftSpeed /= Math.abs(leftSpeed);
-        if (Math.abs(rightSpeed) > 1) rightSpeed /= Math.abs(rightSpeed);
+        if(Math.abs(leftSpeed) > 1 || Math.abs(rightSpeed) > 1){
+            double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+
+            leftSpeed /= Math.abs(max);
+            rightSpeed /= Math.abs(max);
+        }
 
         // Update internal variables for telemetry or feedback
         leftSideOutput = leftSpeed;
