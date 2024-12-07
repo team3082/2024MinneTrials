@@ -1,82 +1,62 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
-
-import java.util.Optional;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.MathUtils.Vector2;
 import frc.robot.Subsystems.Drivetrain;
-import frc.robot.Subsystems.Odometry;
+import frc.robot.Subsystems.Intake;
 import frc.robot.Subsystems.Shooter;
-import frc.robot.Subsystems.Sensors.Pigeon;
-import frc.robot.Subsystems.Sensors.Vision;
 
+/**
+ * Main Robot class extending TimedRobot to handle periodic robot operations.
+ */
 public class Robot extends TimedRobot {
-  private double startTime = 0;
-  private double timeLength = 0;
+  private double startTime; // Records the start time for autonomous mode
+
+  /**
+   * Initializes subsystems and operator interface when the robot is powered on or reset.
+   */
   @Override
   public void robotInit() {
-    // Pigeon.init();
-    Drivetrain.init(); 
-    //Odometry.init();
-    // Telemetry.init();
-    OI.init();
-    Shooter.init();
-  }
-  
-  @Override
-  public void robotPeriodic() {
-    // Pigeon.update();
-    //Odometry.update();
-    // Telemetry.update();
-    Shooter.update();
+    Drivetrain.init(); // Initialize Drivetrain
+    OI.init();         // Initialize Operator Interface
+    Intake.init();     // Initialize Intake
+    Shooter.init();    // Initialize Shooter
   }
 
+  /**
+   * Periodically updates the subsystems during the robot's enabled state.
+   */
+  @Override
+  public void robotPeriodic() {
+    Shooter.update(); // Update Shooter state
+    Intake.update();  // Update Intake state
+  }
+
+  /**
+   * Records the start time for autonomous mode.
+   */
   @Override
   public void autonomousInit() {
     startTime = Timer.getFPGATimestamp();
   }
 
+  /**
+   * Controls robot movement during autonomous mode based on elapsed time.
+   */
   @Override
   public void autonomousPeriodic() {
-    if(startTime + 2 > Timer.getFPGATimestamp()){
-      Drivetrain.arcadeDrive(0, .5);
+    if (startTime + Constants.AutoConstants.AUTO_DURATION > Timer.getFPGATimestamp()) {
+      Drivetrain.arcadeDrive(0, Constants.AutoConstants.AUTO_SPEED); // Drive forward
     } else {
-      Drivetrain.arcadeDrive(0, 0);
+      Drivetrain.arcadeDrive(0, 0); // Stop robot after the set duration
     }
   }
 
-  @Override
-  public void teleopInit() {}
-
+  /**
+   * Updates the operator interface during teleoperated mode to control the robot.
+   */
   @Override
   public void teleopPeriodic() {
-    /*Optional<Vector2> vec = Vision.getPosition();
-    if(vec.isPresent())
-      System.out.println(vec.get());*/
-    Drivetrain.arcadeDrive(OI.getRotation(), OI.getForward());
-    OI.getShooterInput();
+    OI.update(); // Process operator input to control the robot
   }
-
-  @Override
-  public void disabledInit() {}
-
-  @Override
-  public void disabledPeriodic() {}
-
-  @Override
-  public void testInit() {}
-
-  @Override
-  public void testPeriodic() {}
-
-  @Override
-  public void simulationInit() {}
-
-  @Override
-  public void simulationPeriodic() {}
 }

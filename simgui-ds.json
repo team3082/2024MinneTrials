@@ -12,21 +12,20 @@
           "incKey": 68
         },
         {
-          "decKey": 83,
-          "incKey": 87
+          "decKey": 83
         },
         {
-          "decKey": 69,
-          "incKey": 82,
+          "decKey": 67,
+          "incKey": 87,
           "keyRate": 0.009999999776482582
         }
       ],
-      "axisCount": 3,
+      "axisCount": 4,
       "buttonCount": 4,
       "buttonKeys": [
         90,
         88,
-        67,
+        -1,
         86
       ],
       "povConfig": [

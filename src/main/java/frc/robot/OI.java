@@ -1,13 +1,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Subsystems.Drivetrain;
+import frc.robot.Subsystems.Intake;
 import frc.robot.Subsystems.Shooter;
 
 
 public class OI {
     private static Joystick joystick;
-    private static int shooterButton = 2;
-    private static int intakeButton = 5;
+ 
 
     public static void init(){
         joystick = new Joystick(Constants.OIConstants.CONTROLLER_PORT);
@@ -18,7 +19,7 @@ public class OI {
         if(Math.abs(output) > Constants.OIConstants.RANGE){
             return -output;
         }
-        return 0.00;
+        return 0;
 
     }
 
@@ -27,30 +28,29 @@ public class OI {
         if(Math.abs(output) > Constants.OIConstants.RANGE){
             return output*.3;
         }
-        return 0.000;
+        return 0;
     }
 
-    public static void getShooterInput() {
-        // is the left shoulder being pushed down?
-        if(joystick.getRawButtonPressed(intakeButton)){
-            // spin intake motor
-            Shooter.quickIntake();
-        }
-
-        if(joystick.getRawButtonReleased(intakeButton)){
-            Shooter.intakeOff();
-        }
-
-        // is the left trigger pushed down all the way?
-        if(joystick.getRawAxis(shooterButton) > 0.95){
-            Shooter.shoot();
-        } else {
-            Shooter.turnOff();
-        }
-
-        // prints the state that the shooter's state machine is in at the time
-        System.out.println(Shooter.getShooterState());
+    public static void update() {
+        Drivetrain.arcadeDrive(OI.getRotation(), OI.getForward());
         
+        if(joystick.getRawAxis(Constants.OIConstants.SHOOTER_BUTTON) > 0.95){
+            Shooter.shoot();
+        }
+
+        if(joystick.getRawButton(Constants.OIConstants.INTAKE_BUTTON)){
+            Intake.manualIntake();
+        } 
+        
+        if(joystick.getRawButtonReleased(Constants.OIConstants.INTAKE_BUTTON)){
+            Intake.manualOff();
+        }
+
+    }
+
+    public static boolean getShootWhenRunning() {
+        if(joystick.getRawAxis(Constants.OIConstants.SHOOTER_BUTTON) > 0.95) return true;
+        return false;
     }
 }
  

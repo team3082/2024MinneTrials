@@ -46,10 +46,10 @@ public class Drivetrain {
      * @param forward The desired forward/backward speed (-1.0 to 1.0).
      * @param rotate  The desired rotation speed (-1.0 to 1.0).
      */
-    public static void arcadeDrive(double forward, double rotate) {
+    public static void arcadeDrive(double rotate, double forward) {
         // Calculate individual side speeds
-        double leftSpeed = forward + rotate;
-        double rightSpeed = forward - rotate;
+        double leftSpeed = rotate + forward;
+        double rightSpeed = rotate - forward;
 
         // Normalize speeds to stay within the range [-1, 1]
         if(Math.abs(leftSpeed) > 1 || Math.abs(rightSpeed) > 1){
