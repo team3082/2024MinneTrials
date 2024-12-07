@@ -101,7 +101,11 @@ public class Shooter {
         }
     }
 
+    /**
+     * Set the shooter into intake mode, will move motors backward to put ball into position
+     */
     public static void intake(){
+        if(shooterState != ShooterState.OFF) return;
         shooterMotor.set(TalonSRXControlMode.PercentOutput, Constants.IntakeConstants.SHOOTER_BACK_SPEED);
         shooterState = ShooterState.INTAKING;
         SmartDashboard.putString("Shooter State", shooterState.name());
